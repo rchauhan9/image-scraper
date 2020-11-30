@@ -1,9 +1,16 @@
-from src.scraper.image_scraper import ImageScraper
+import flask
+
+from src.rest.images import images
+
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+app.register_blueprint(images)
+
+
+@app.route('/', methods=['GET'])
+def home():
+    return '''<h1>Hello, from Flask!</h1>'''
 
 
 if __name__ == '__main__':
-    scraper = ImageScraper()
-    urls = scraper.get_image_urls('Dogs', 10, 1)
-    for url in urls:
-        scraper.persist_image('/Users/rajanchauhan/Desktop/Programming-Projects.nosync/Python '
-                          'Projects/image-scraper/images', url)
+    app.run(port=6164)

@@ -62,6 +62,17 @@ class ImageScraper:
         except Exception as e:
             self.logger.error(f"ERROR - Could not save {url} - {e}")
 
+    def get_in_memory_image(self, url: str, format: str):
+        image_content = self.__download_image_content(url)
+        try:
+            image_file = io.BytesIO(image_content)
+            pil_image = Image.open(image_file).convert('RGB')
+            in_mem_file = io.BytesIO()
+            pil_image.save(in_mem_file, format=format)
+            return in_mem_file.getvalue()
+        except Exception as e:
+            self.logger.error(f"Could not get image data: {e}")
+
     def close_connection(self):
         self.driver.quit()
 
